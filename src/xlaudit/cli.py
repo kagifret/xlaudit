@@ -145,6 +145,30 @@ def summary(path: str, recursive: bool):
         f"[green]LOW < 10[/green]  [yellow]MED 10–25[/yellow]  [red]HIGH > 25[/red]"
     )
 
+@cli.command()
+@click.option("--host", default="127.0.0.1", help="Bind address.")
+@click.option("--port", "-p", default=8000, type=int, help="Port number.")
+@click.option("--open/--no-open", default=True, help="Open browser automatically.")
+def serve(host: str, port: int, open: bool):
+    """Launch the xlaudit web dashboard."""
+    try:
+        import uvicorn
+    except ImportError:
+        console.print(
+            "[red]Error:[/red] Web dependencies not installed.\n"
+            "Run: [bold]pip install xlaudit\\[web][/bold]"
+        )
+        sys.exit(1)
+
+    console.print(f"\n  [bold]xlaudit dashboard[/bold] starting at [cyan]http://{host}:{port}[/cyan]\n")
+
+    if open:
+        import threading, webbrowser
+        threading.Timer(1.2, lambda: webbrowser.open(f"http://{host}:{port}")).start()
+
+    uvicorn.run("xlaudit.web.app:app", host=host, port=port, log_level="info")
+
 
 if __name__ == "__main__":
     cli()
+

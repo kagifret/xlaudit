@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 @dataclasses.dataclass
@@ -15,6 +15,7 @@ class SheetResult:
     volatile_count: int = 0
     cross_sheet_ref_count: int = 0
     external_refs: List[str] = dataclasses.field(default_factory=list)
+    cross_sheet_targets: Dict[str, int] = dataclasses.field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return dataclasses.asdict(self)

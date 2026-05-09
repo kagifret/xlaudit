@@ -37,6 +37,11 @@ dev = [
     "pytest>=7.0",
     "pytest-cov",
 ]
+web = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "python-multipart>=0.0.9",
+]
 graph = [
     "networkx>=3.0",
 ]

@@ -11,6 +11,7 @@ from xlaudit.models import ScanReport, SheetResult, WorkbookResult
 from xlaudit.parser import (
     count_cross_sheet_refs,
     count_volatile,
+    detect_cross_sheet_targets,
     detect_external_links,
     get_named_ranges,
     iter_formulas,
@@ -50,12 +51,14 @@ def scan_workbook(path: str | Path) -> WorkbookResult:
             cell_count += len(row)
         total_cells += cell_count
 
+        targets = detect_cross_sheet_targets(formulas)
         sr = SheetResult(
             name=ws.title,
             formula_count=len(formulas),
             volatile_count=vol,
             cross_sheet_ref_count=cross,
             external_refs=sorted(ext_links),
+            cross_sheet_targets=targets,
         )
         sheet_results.append(sr)
         total_formulas += len(formulas)

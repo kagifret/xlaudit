@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>xlaudit Dashboard</title>
+  <meta name="description" content="Audit Excel workbooks for complexity and migration risk">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="shell">
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <h1>xlaudit</h1>
+        <span class="ver">dashboard</span>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-panel="scan">Scan</button>
+        <button class="tab" data-panel="graph">Dependency Graph</button>
+      </div>
+    </header>
+
+    <!-- Error bar -->
+    <div class="error-bar" id="error-bar"></div>
+
+    <!-- Scan panel -->
+    <div class="panel active" id="panel-scan">
+      <!-- Drop zone -->
+      <div class="drop-zone" id="drop-zone">
+        <div class="icon">&#128202;</div>
+        <div class="label">Drop .xlsx files here or click to browse</div>
+        <div class="hint">Supports multiple files &mdash; drag a folder of spreadsheets</div>
+        <input type="file" id="file-input" multiple accept=".xlsx">
+      </div>
+
+      <!-- Loader -->
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <span>Scanning workbooks&hellip;</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats" id="stats-wrap" style="display:none"></div>
+
+      <!-- Results table -->
+      <div id="table-wrap" style="display:none"></div>
+    </div>
+
+    <!-- Graph panel -->
+    <div class="panel" id="panel-graph">
+      <div id="graph-container">
+        <div class="empty-msg">Upload and scan workbooks first to see the dependency graph</div>
+      </div>
+      <div class="graph-legend">
+        <div class="item"><div class="dot" style="background:#818cf8"></div> Sheet</div>
+        <div class="item"><div class="dot" style="background:#34d399"></div> Workbook (LOW)</div>
+        <div class="item"><div class="dot" style="background:#fbbf24"></div> Workbook (MED)</div>
+        <div class="item"><div class="dot" style="background:#f87171"></div> Workbook (HIGH)</div>
+        <div class="item"><div class="dot" style="background:#38bdf8"></div> External</div>
+        <div class="item" style="color:var(--tx3)">&#x2500;&#x2500; cross-sheet &nbsp; - - - external</div>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <div class="foot">xlaudit dashboard</div>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

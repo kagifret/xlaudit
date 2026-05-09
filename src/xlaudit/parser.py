@@ -92,9 +92,36 @@ def count_cross_sheet_refs(formulas: List[str]) -> int:
     return count
 
 
+# Captures the sheet name from cross-sheet references
+_RE_CROSS_SHEET_TARGET = re.compile(
+    r"""(?<!\[)
+    (?:'([^']+)' | ([A-Za-z_]\w*))   # group 1: quoted, group 2: unquoted
+    !
+    \$?[A-Z]{1,3}\$?\d+
+    """,
+    re.VERBOSE,
+)
+
+
+def detect_cross_sheet_targets(formulas: List[str]) -> dict[str, int]:
+    """Return ``{target_sheet_name: ref_count}`` for cross-sheet refs.
+
+    External-link references are excluded.
+    """
+    targets: dict[str, int] = {}
+    for f in formulas:
+        cleaned = _RE_EXTERNAL_FULL.sub("", f)
+        for m in _RE_CROSS_SHEET_TARGET.finditer(cleaned):
+            name = m.group(1) or m.group(2)
+            if name:
+                targets[name] = targets.get(name, 0) + 1
+    return targets
+
+
 def get_named_ranges(wb: Workbook) -> List[str]:
     """Return list of defined-name labels in the workbook."""
     try:
         return [dn.name for dn in wb.defined_names.definedName]
     except AttributeError:
         return list(wb.defined_names.keys()) if hasattr(wb.defined_names, "keys") else []
+

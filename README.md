@@ -32,6 +32,17 @@ xlaudit scan ./reports --output html --save report.html
 xlaudit summary ./reports
 ```
 
+
+### GUI
+
+```bash
+xlaudit serve # launches at http://localhost:8000, auto-opens browser
+
+xlaudit serve --port 9000 #custom port
+```
+
+
+
 ### Terminal Output
 
 ```
